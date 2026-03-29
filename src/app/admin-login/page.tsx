@@ -20,10 +20,7 @@ export default function AdminLoginPage() {
         password,
       });
 
-      // Save token in localStorage
       localStorage.setItem('adminToken', res.data.token);
-
-      // Redirect to Admin Dashboard
       router.push('/admin-dashboard');
     } catch (err: any) {
       console.error(err);
@@ -32,13 +29,24 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-6 rounded shadow w-full max-w-md">
+    <div
+      className="min-h-screen flex items-center justify-center relative"
+      style={{
+        backgroundImage:
+          "url('https://images.unsplash.com/photo-1581091012184-4e9f9c17b1c1?auto=format&fit=crop&w=1950&q=80')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
+      {/* Overlay for better readability */}
+      <div className="absolute inset-0 bg-black bg-opacity-30"></div>
+
+      <div className="relative z-10 bg-white bg-opacity-90 p-8 rounded shadow-md w-full max-w-md backdrop-blur-sm">
         <h2 className="text-2xl font-bold mb-4 text-center">Admin Login</h2>
 
         {error && <p className="text-red-500 mb-3">{error}</p>}
 
-        <form onSubmit={handleLogin} className="space-y-3">
+        <form onSubmit={handleLogin} className="space-y-4">
           <input
             type="email"
             placeholder="Email"
@@ -47,7 +55,6 @@ export default function AdminLoginPage() {
             className="w-full p-2 border rounded"
             required
           />
-
           <input
             type="password"
             placeholder="Password"
@@ -56,7 +63,6 @@ export default function AdminLoginPage() {
             className="w-full p-2 border rounded"
             required
           />
-
           <button
             type="submit"
             className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"

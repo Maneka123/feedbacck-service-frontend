@@ -5,7 +5,14 @@ import FeedbackForm from '../../components/FeedbackForm';
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center p-6">
+      
+      {/* Main Heading */}
+      <h1 className="text-4xl font-bold mb-8 text-center text-blue-600">
+        Feedback Analysis Application
+      </h1>
+
+      {/* Forms side by side */}
       <div className="flex flex-col lg:flex-row gap-6 w-full max-w-6xl">
         
         {/* Feedback Form */}

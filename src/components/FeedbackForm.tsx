@@ -39,71 +39,83 @@ export default function FeedbackForm() {
   };
 
   return (
-    <div className="max-w-xl mx-auto mt-10 p-6 bg-white rounded shadow">
-      <h2 className="text-2xl font-bold mb-4 text-center">Submit Feedback</h2>
+    <div
+      className="min-h-screen flex items-center justify-center bg-cover bg-center relative"
+      style={{
+        backgroundImage:
+          "url('https://images.unsplash.com/photo-1593642634367-d91a135587b5?auto=format&fit=crop&w=1950&q=80')",
+      }}
+    >
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-black bg-opacity-30 pointer-events-none"></div>
 
-      {success && <p className="text-green-500 mb-3">{success}</p>}
-      {error && <p className="text-red-500 mb-3">{error}</p>}
+      {/* Form container */}
+      <div className="relative z-10 w-full max-w-xl p-6 bg-white bg-opacity-90 rounded shadow-md backdrop-blur-sm">
+        <h2 className="text-2xl font-bold mb-4 text-center">Submit Feedback</h2>
 
-      <form onSubmit={handleSubmit} className="space-y-3">
-        <input
-          type="text"
-          placeholder="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="w-full p-2 border rounded"
-          required
-        />
+        {success && <p className="text-green-500 mb-3">{success}</p>}
+        {error && <p className="text-red-500 mb-3">{error}</p>}
 
-        <textarea
-          placeholder="Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          className="w-full p-2 border rounded"
-          rows={4}
-          required
-        />
+        <form onSubmit={handleSubmit} className="space-y-3">
+          <input
+            type="text"
+            placeholder="Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="w-full p-2 border rounded"
+            required
+          />
 
-        <select
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="w-full p-2 border rounded"
-          required
-        >
-          <option value="" disabled>
-            Select Category
-          </option>
-          <option value="Bug">Bug</option>
-          <option value="Feature Request">Feature Request</option>
-          <option value="Improvement">Improvement</option>
-          <option value="Other">Other</option>
-        </select>
+          <textarea
+            placeholder="Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="w-full p-2 border rounded"
+            rows={4}
+            required
+          />
 
-        <input
-          type="text"
-          placeholder="Your Name"
-          value={submitterName}
-          onChange={(e) => setSubmitterName(e.target.value)}
-          className="w-full p-2 border rounded"
-          required
-        />
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="w-full p-2 border rounded"
+            required
+          >
+            <option value="" disabled>
+              Select Category
+            </option>
+            <option value="Bug">Bug</option>
+            <option value="Feature Request">Feature Request</option>
+            <option value="Improvement">Improvement</option>
+            <option value="Other">Other</option>
+          </select>
 
-        <input
-          type="email"
-          placeholder="Your Email"
-          value={submitterEmail}
-          onChange={(e) => setSubmitterEmail(e.target.value)}
-          className="w-full p-2 border rounded"
-          required
-        />
+          <input
+            type="text"
+            placeholder="Your Name"
+            value={submitterName}
+            onChange={(e) => setSubmitterName(e.target.value)}
+            className="w-full p-2 border rounded"
+            required
+          />
 
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
-        >
-          Submit Feedback
-        </button>
-      </form>
+          <input
+            type="email"
+            placeholder="Your Email"
+            value={submitterEmail}
+            onChange={(e) => setSubmitterEmail(e.target.value)}
+            className="w-full p-2 border rounded"
+            required
+          />
+
+          <button
+            type="submit"
+            className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+          >
+            
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
