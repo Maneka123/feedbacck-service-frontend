@@ -53,10 +53,25 @@ export default function AdminDashboard() {
         { status },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      fetchFeedback(); // Refresh the table
+      fetchFeedback(); // Refresh table
     } catch (err) {
       console.error(err);
       alert('Failed to update status');
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!token) return;
+    if (!confirm('Are you sure you want to delete this feedback?')) return;
+
+    try {
+      await axios.delete(`http://localhost:4000/api/feedback/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      fetchFeedback(); // Refresh table
+    } catch (err) {
+      console.error(err);
+      alert('Failed to delete feedback');
     }
   };
 
@@ -75,6 +90,7 @@ export default function AdminDashboard() {
               <th className="p-2">Priority</th>
               <th className="p-2">Sentiment</th>
               <th className="p-2">Update Status</th>
+              <th className="p-2">Delete</th>
             </tr>
           </thead>
           <tbody>
@@ -96,6 +112,14 @@ export default function AdminDashboard() {
                     <option value="In Progress">In Progress</option>
                     <option value="Resolved">Resolved</option>
                   </select>
+                </td>
+                <td className="p-2">
+                  <button
+                    onClick={() => handleDelete(fb._id)}
+                    className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}
