@@ -20,6 +20,9 @@ export default function AdminDashboard() {
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [selectedFeedback, setSelectedFeedback] = useState<Feedback | null>(null);
+  const [showModal, setShowModal] = useState(false);
+
   const router = useRouter();
   const token = typeof window !== 'undefined' ? localStorage.getItem('adminToken') : null;
 
@@ -30,7 +33,7 @@ export default function AdminDashboard() {
     }
 
     try {
-      const res = await axios.get(`http://localhost:4000/api/feedback/list?page=${page}&limit=10`, {
+      const res = await axios.get(`http://localhost:4000/api/feedback/list?page=${page}&limit=5`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setFeedbacks(res.data.data);
@@ -75,6 +78,22 @@ export default function AdminDashboard() {
     }
   };
 
+  // View single feedback details
+  const handleView = async (id: string) => {
+    if (!token) return;
+
+    try {
+      const res = await axios.get(`http://localhost:4000/api/feedback/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setSelectedFeedback(res.data.data);
+      setShowModal(true);
+    } catch (err) {
+      console.error(err);
+      alert('Failed to fetch feedback details');
+    }
+  };
+
   return (
     <div className="min-h-screen p-6 bg-gray-100">
       <h1 className="text-3xl font-bold mb-6 text-center">Admin Dashboard</h1>
@@ -91,6 +110,7 @@ export default function AdminDashboard() {
               <th className="p-2">Sentiment</th>
               <th className="p-2">Update Status</th>
               <th className="p-2">Delete</th>
+              <th className="p-2">View</th>
             </tr>
           </thead>
           <tbody>
@@ -121,6 +141,14 @@ export default function AdminDashboard() {
                     Delete
                   </button>
                 </td>
+                <td className="p-2">
+                  <button
+                    onClick={() => handleView(fb._id)}
+                    className="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600"
+                  >
+                    View
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -145,6 +173,28 @@ export default function AdminDashboard() {
           Next
         </button>
       </div>
+
+      {/* Modal for viewing one feedback */}
+      {showModal && selectedFeedback && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded shadow w-full max-w-lg relative">
+            <button
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+              onClick={() => setShowModal(false)}
+            >
+              ✖
+            </button>
+            <h2 className="text-xl font-bold mb-2">{selectedFeedback.title}</h2>
+            <p><strong>Category:</strong> {selectedFeedback.category}</p>
+            <p><strong>Status:</strong> {selectedFeedback.status}</p>
+            <p><strong>Description:</strong> {selectedFeedback.description}</p>
+            <p><strong>AI Category:</strong> {selectedFeedback.ai_category || '-'}</p>
+            <p><strong>Priority:</strong> {selectedFeedback.ai_priority ?? '-'}</p>
+            <p><strong>Sentiment:</strong> {selectedFeedback.ai_sentiment || '-'}</p>
+            <p><strong>AI Summary:</strong> {selectedFeedback.ai_summary || '-'}</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
