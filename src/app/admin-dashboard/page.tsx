@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import AdminNavbar from './AdminNavbar';
 
 interface Feedback {
   _id: string;
@@ -78,7 +79,6 @@ export default function AdminDashboard() {
     }
   };
 
-  // View single feedback details
   const handleView = async (id: string) => {
     if (!token) return;
 
@@ -95,110 +95,111 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen p-6 bg-gray-100">
-      <h1 className="text-3xl font-bold mb-6 text-center">Admin Dashboard</h1>
+    <div className="min-h-screen bg-gray-100">
+      {/* Navbar */}
+      <AdminNavbar />
 
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white rounded shadow">
-          <thead>
-            <tr className="bg-gray-200 text-left">
-              <th className="p-2">Title</th>
-              <th className="p-2">Category</th>
-              <th className="p-2">Status</th>
-              <th className="p-2">AI Category</th>
-              <th className="p-2">Priority</th>
-              <th className="p-2">Sentiment</th>
-              <th className="p-2">Update Status</th>
-              <th className="p-2">Delete</th>
-              <th className="p-2">View</th>
-            </tr>
-          </thead>
-          <tbody>
-            {feedbacks.map((fb) => (
-              <tr key={fb._id} className="border-t">
-                <td className="p-2">{fb.title}</td>
-                <td className="p-2">{fb.category}</td>
-                <td className="p-2">{fb.status}</td>
-                <td className="p-2">{fb.ai_category || '-'}</td>
-                <td className="p-2">{fb.ai_priority ?? '-'}</td>
-                <td className="p-2">{fb.ai_sentiment || '-'}</td>
-                <td className="p-2">
-                  <select
-                    value={fb.status}
-                    onChange={(e) => handleStatusUpdate(fb._id, e.target.value)}
-                    className="border rounded p-1"
-                  >
-                    <option value="New">New</option>
-                    <option value="In Progress">In Progress</option>
-                    <option value="Resolved">Resolved</option>
-                  </select>
-                </td>
-                <td className="p-2">
-                  <button
-                    onClick={() => handleDelete(fb._id)}
-                    className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
-                  >
-                    Delete
-                  </button>
-                </td>
-                <td className="p-2">
-                  <button
-                    onClick={() => handleView(fb._id)}
-                    className="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600"
-                  >
-                    View
-                  </button>
-                </td>
+      <div className="p-6">
+        <h1 className="text-3xl font-bold mb-6 text-center">Admin Dashboard</h1>
+
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-white rounded shadow">
+            <thead>
+              <tr className="bg-gray-200 text-left">
+                <th className="p-2">Title</th>
+                <th className="p-2">Category</th>
+                <th className="p-2">Status</th>
+                <th className="p-2">AI Category</th>
+                <th className="p-2">Priority</th>
+                <th className="p-2">Sentiment</th>
+                <th className="p-2">Update Status</th>
+                <th className="p-2">Delete</th>
+                <th className="p-2">View</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Pagination */}
-      <div className="flex justify-center mt-4 gap-2">
-        <button
-          disabled={page <= 1}
-          onClick={() => setPage(page - 1)}
-          className="px-3 py-1 bg-blue-500 text-white rounded disabled:bg-gray-300"
-        >
-          Prev
-        </button>
-        <span className="px-2 py-1">{page} / {totalPages}</span>
-        <button
-          disabled={page >= totalPages}
-          onClick={() => setPage(page + 1)}
-          className="px-3 py-1 bg-blue-500 text-white rounded disabled:bg-gray-300"
-        >
-          Next
-        </button>
-      </div>
-
-      {/* Modal for viewing one feedback */}
-      {showModal && selectedFeedback && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-6 rounded shadow w-full max-w-lg relative">
-            <button
-              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-              onClick={() => setShowModal(false)}
-            >
-              ✖
-            </button>
-            <h2 className="text-xl font-bold mb-2">{selectedFeedback.title}</h2>
-            <p><strong>Category:</strong> {selectedFeedback.category}</p>
-            <p><strong>Status:</strong> {selectedFeedback.status}</p>
-            <p><strong>Description:</strong> {selectedFeedback.description}</p>
-            <p><strong>AI Category:</strong> {selectedFeedback.ai_category || '-'}</p>
-            <p><strong>Priority:</strong> {selectedFeedback.ai_priority ?? '-'}</p>
-            <p><strong>Sentiment:</strong> {selectedFeedback.ai_sentiment || '-'}</p>
-            <p><strong>AI Summary:</strong> {selectedFeedback.ai_summary || '-'}</p>
-          </div>
+            </thead>
+            <tbody>
+              {feedbacks.map((fb) => (
+                <tr key={fb._id} className="border-t">
+                  <td className="p-2">{fb.title}</td>
+                  <td className="p-2">{fb.category}</td>
+                  <td className="p-2">{fb.status}</td>
+                  <td className="p-2">{fb.ai_category || '-'}</td>
+                  <td className="p-2">{fb.ai_priority ?? '-'}</td>
+                  <td className="p-2">{fb.ai_sentiment || '-'}</td>
+                  <td className="p-2">
+                    <select
+                      value={fb.status}
+                      onChange={(e) => handleStatusUpdate(fb._id, e.target.value)}
+                      className="border rounded p-1"
+                    >
+                      <option value="New">New</option>
+                      <option value="In Progress">In Progress</option>
+                      <option value="Resolved">Resolved</option>
+                    </select>
+                  </td>
+                  <td className="p-2">
+                    <button
+                      onClick={() => handleDelete(fb._id)}
+                      className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                  <td className="p-2">
+                    <button
+                      onClick={() => handleView(fb._id)}
+                      className="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600"
+                    >
+                      View
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-      )}
-      <a href="/admin-dashboard/feedback-filter" className="text-blue-500 hover:underline">
-  Filter Feedback
-</a>
+
+        {/* Pagination */}
+        <div className="flex justify-center mt-4 gap-2">
+          <button
+            disabled={page <= 1}
+            onClick={() => setPage(page - 1)}
+            className="px-3 py-1 bg-blue-500 text-white rounded disabled:bg-gray-300"
+          >
+            Prev
+          </button>
+          <span className="px-2 py-1">{page} / {totalPages}</span>
+          <button
+            disabled={page >= totalPages}
+            onClick={() => setPage(page + 1)}
+            className="px-3 py-1 bg-blue-500 text-white rounded disabled:bg-gray-300"
+          >
+            Next
+          </button>
+        </div>
+
+        {/* Modal */}
+        {showModal && selectedFeedback && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div className="bg-white p-6 rounded shadow w-full max-w-lg relative">
+              <button
+                className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+                onClick={() => setShowModal(false)}
+              >
+                ✖
+              </button>
+              <h2 className="text-xl font-bold mb-2">{selectedFeedback.title}</h2>
+              <p><strong>Category:</strong> {selectedFeedback.category}</p>
+              <p><strong>Status:</strong> {selectedFeedback.status}</p>
+              <p><strong>Description:</strong> {selectedFeedback.description}</p>
+              <p><strong>AI Category:</strong> {selectedFeedback.ai_category || '-'}</p>
+              <p><strong>Priority:</strong> {selectedFeedback.ai_priority ?? '-'}</p>
+              <p><strong>Sentiment:</strong> {selectedFeedback.ai_sentiment || '-'}</p>
+              <p><strong>AI Summary:</strong> {selectedFeedback.ai_summary || '-'}</p>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
-    
   );
 }
