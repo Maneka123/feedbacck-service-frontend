@@ -18,29 +18,47 @@ interface Feedback {
 
 export default function AdminDashboard() {
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const router = useRouter();
+  const token = typeof window !== 'undefined' ? localStorage.getItem('adminToken') : null;
+
+  const fetchFeedback = async () => {
+    if (!token) {
+      router.push('/admin-login');
+      return;
+    }
+
+    try {
+      const res = await axios.get(`http://localhost:4000/api/feedback/list?page=${page}&limit=10`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setFeedbacks(res.data.data);
+      setTotalPages(res.data.pages);
+    } catch (err) {
+      console.error(err);
+      router.push('/admin-login');
+    }
+  };
 
   useEffect(() => {
-    const fetchFeedback = async () => {
-      const token = localStorage.getItem('adminToken');
-      if (!token) {
-        router.push('/admin-login');
-        return;
-      }
-
-      try {
-        const res = await axios.get('http://localhost:4000/api/feedback/list', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setFeedbacks(res.data.data);
-      } catch (err) {
-        console.error(err);
-        router.push('/admin-login');
-      }
-    };
-
     fetchFeedback();
-  }, [router]);
+  }, [page]);
+
+  const handleStatusUpdate = async (id: string, status: string) => {
+    if (!token) return;
+    try {
+      await axios.patch(
+        `http://localhost:4000/api/feedback/${id}/status`,
+        { status },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      fetchFeedback(); // Refresh the table
+    } catch (err) {
+      console.error(err);
+      alert('Failed to update status');
+    }
+  };
 
   return (
     <div className="min-h-screen p-6 bg-gray-100">
@@ -56,6 +74,7 @@ export default function AdminDashboard() {
               <th className="p-2">AI Category</th>
               <th className="p-2">Priority</th>
               <th className="p-2">Sentiment</th>
+              <th className="p-2">Update Status</th>
             </tr>
           </thead>
           <tbody>
@@ -67,10 +86,40 @@ export default function AdminDashboard() {
                 <td className="p-2">{fb.ai_category || '-'}</td>
                 <td className="p-2">{fb.ai_priority ?? '-'}</td>
                 <td className="p-2">{fb.ai_sentiment || '-'}</td>
+                <td className="p-2">
+                  <select
+                    value={fb.status}
+                    onChange={(e) => handleStatusUpdate(fb._id, e.target.value)}
+                    className="border rounded p-1"
+                  >
+                    <option value="New">New</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Resolved">Resolved</option>
+                  </select>
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* Pagination */}
+      <div className="flex justify-center mt-4 gap-2">
+        <button
+          disabled={page <= 1}
+          onClick={() => setPage(page - 1)}
+          className="px-3 py-1 bg-blue-500 text-white rounded disabled:bg-gray-300"
+        >
+          Prev
+        </button>
+        <span className="px-2 py-1">{page} / {totalPages}</span>
+        <button
+          disabled={page >= totalPages}
+          onClick={() => setPage(page + 1)}
+          className="px-3 py-1 bg-blue-500 text-white rounded disabled:bg-gray-300"
+        >
+          Next
+        </button>
       </div>
     </div>
   );
