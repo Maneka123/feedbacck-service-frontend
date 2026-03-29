@@ -17,6 +17,34 @@ export default function FeedbackForm() {
     setSuccess('');
     setError('');
 
+    // Client-side validation
+    if (!title.trim()) {
+      setError('Title cannot be empty.');
+      return;
+    }
+    if (description.trim().length < 20) {
+      setError('Description must be at least 20 characters long.');
+      return;
+    }
+    if (!category) {
+      setError('Please select a category.');
+      return;
+    }
+    if (!submitterName.trim()) {
+      setError('Name cannot be empty.');
+      return;
+    }
+    if (!submitterEmail.trim()) {
+      setError('Email cannot be empty.');
+      return;
+    }
+    // Simple email regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(submitterEmail)) {
+      setError('Please enter a valid email.');
+      return;
+    }
+
     try {
       const res = await axios.post('http://localhost:4000/api/feedback', {
         title,
@@ -49,37 +77,34 @@ export default function FeedbackForm() {
       {/* Overlay */}
       <div className="absolute inset-0 bg-black bg-opacity-30 pointer-events-none"></div>
 
-      {/* Form container */}
-      <div className="relative z-10 w-full max-w-xl p-6 bg-white bg-opacity-90 rounded shadow-md backdrop-blur-sm">
+      {/* Form container with increased height */}
+      <div className="relative z-10 w-full max-w-xl p-8 min-h-[650px] bg-white bg-opacity-90 rounded shadow-md backdrop-blur-sm">
         <h2 className="text-2xl font-bold mb-4 text-center">Submit Feedback</h2>
 
         {success && <p className="text-green-500 mb-3">{success}</p>}
         {error && <p className="text-red-500 mb-3">{error}</p>}
 
-        <form onSubmit={handleSubmit} className="space-y-3">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"
             placeholder="Title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full p-2 border rounded"
-            required
+            className="w-full p-3 border rounded"
           />
 
           <textarea
             placeholder="Description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full p-2 border rounded"
-            rows={4}
-            required
+            className="w-full p-3 border rounded"
+            rows={6}
           />
 
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full p-2 border rounded"
-            required
+            className="w-full p-3 border rounded"
           >
             <option value="" disabled>
               Select Category
@@ -95,8 +120,7 @@ export default function FeedbackForm() {
             placeholder="Your Name"
             value={submitterName}
             onChange={(e) => setSubmitterName(e.target.value)}
-            className="w-full p-2 border rounded"
-            required
+            className="w-full p-3 border rounded"
           />
 
           <input
@@ -104,15 +128,14 @@ export default function FeedbackForm() {
             placeholder="Your Email"
             value={submitterEmail}
             onChange={(e) => setSubmitterEmail(e.target.value)}
-            className="w-full p-2 border rounded"
-            required
+            className="w-full p-3 border rounded"
           />
 
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+            className="w-full bg-blue-500 text-white py-3 rounded hover:bg-blue-600"
           >
-            
+            Submit Feedback
           </button>
         </form>
       </div>
