@@ -195,6 +195,10 @@ export default function AdminDashboard() {
           </div>
         </div>
       )}
+      <a href="/admin-dashboard/feedback-filter" className="text-blue-500 hover:underline">
+  Filter Feedback
+</a>
     </div>
+    
   );
 }
