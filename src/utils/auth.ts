@@ -2,6 +2,6 @@
 export const logoutAdmin = () => {
   if (typeof window !== 'undefined') {
     localStorage.removeItem('adminToken'); // Remove JWT token
-    window.location.href = '/admin-login'; // Redirect to login page
+    window.location.href = '/login-feedback'; // Redirect to login page
   }
 };

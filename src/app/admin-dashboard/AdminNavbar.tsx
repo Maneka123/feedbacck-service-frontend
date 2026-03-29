@@ -14,6 +14,9 @@ export default function AdminNavbar() {
         <Link href="/admin-dashboard/feedback-filter" className="text-blue-500 hover:underline">
           Filter Feedback
         </Link>
+        <Link href="/submit-feedback" className="text-blue-500 hover:underline">
+          Submit Feedback
+        </Link>
       </div>
       <button
         onClick={logoutAdmin}
