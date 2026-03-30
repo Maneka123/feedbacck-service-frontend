@@ -1,4 +1,3 @@
-// feedback-frontend/src/components/AdminNavbar.tsx
 'use client';
 
 import Link from 'next/link';
@@ -16,6 +15,10 @@ export default function AdminNavbar() {
         </Link>
         <Link href="/submit-feedback" className="text-blue-500 hover:underline">
           Submit Feedback
+        </Link>
+        {/* New Feedback Summary link */}
+        <Link href="/feedback-summary" className="text-blue-500 hover:underline">
+          Feedback Summary
         </Link>
       </div>
       <button
