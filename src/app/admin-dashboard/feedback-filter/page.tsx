@@ -33,7 +33,7 @@ export default function FeedbackFilter() {
     }
 
     try {
-      const res = await axios.get(`http://localhost:4000/api/feedback/list?page=1&limit=1000`, {
+      const res = await axios.get(`http://localhost:4001/api/feedback/list?page=1&limit=1000`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setFeedbacks(res.data.data);

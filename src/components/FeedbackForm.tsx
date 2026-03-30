@@ -46,7 +46,7 @@ export default function FeedbackForm() {
     }
 
     try {
-      const res = await axios.post('http://localhost:4000/api/feedback', {
+      const res = await axios.post('http://localhost:4001/api/feedback', {
         title,
         description,
         category,

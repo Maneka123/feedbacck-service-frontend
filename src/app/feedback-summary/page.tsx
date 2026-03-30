@@ -21,7 +21,7 @@ export default function FeedbackSummary() {
 
   const fetchFeedbacks = async () => {
     try {
-      const res = await axios.get('http://localhost:4000/api/feedback/list/summary');
+      const res = await axios.get('http://localhost:4001/api/feedback/list/summary');
       setFeedbacks(res.data.data);
     } catch (error) {
       console.error('Error fetching feedback:', error);

@@ -34,7 +34,7 @@ export default function AdminDashboard() {
     }
 
     try {
-      const res = await axios.get(`http://localhost:4000/api/feedback/list?page=${page}&limit=5`, {
+      const res = await axios.get(`http://localhost:4001/api/feedback/list?page=${page}&limit=5`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setFeedbacks(res.data.data);
@@ -53,7 +53,7 @@ export default function AdminDashboard() {
     if (!token) return;
     try {
       await axios.patch(
-        `http://localhost:4000/api/feedback/${id}/status`,
+        `http://localhost:4001/api/feedback/${id}/status`,
         { status },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -69,7 +69,7 @@ export default function AdminDashboard() {
     if (!confirm('Are you sure you want to delete this feedback?')) return;
 
     try {
-      await axios.delete(`http://localhost:4000/api/feedback/${id}`, {
+      await axios.delete(`http://localhost:4001/api/feedback/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchFeedback(); // Refresh table
@@ -83,7 +83,7 @@ export default function AdminDashboard() {
     if (!token) return;
 
     try {
-      const res = await axios.get(`http://localhost:4000/api/feedback/${id}`, {
+      const res = await axios.get(`http://localhost:4001/api/feedback/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setSelectedFeedback(res.data.data);
